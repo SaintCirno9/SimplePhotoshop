@@ -77,6 +77,7 @@ public:
         string path = basePath.substr(0, basePath.find(".bmp"));
         path += "_save.bmp";
         return SaveImage(path);
+
     }
 
     void ShowBMPInfo();
