@@ -65,6 +65,14 @@ public:
         return channels;
     }
 
+    const vector<vector<uchar>> &getData() {
+        return data;
+    }
+
+    void setData(const vector<vector<uchar>> &data) {
+        this->data = data;
+    }
+
     bool is_loaded() const {
         return loaded;
     }
