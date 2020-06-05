@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+string
+-
+fstream
+-
+iostream
+-
+vector
+-
+
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/main.cpp
+SaveLoad.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+

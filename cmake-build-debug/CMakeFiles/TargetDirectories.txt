@@ -1,0 +1,3 @@
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/cmake-build-debug/CMakeFiles/SimplePhotoshop.dir
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/cmake-build-debug/CMakeFiles/edit_cache.dir

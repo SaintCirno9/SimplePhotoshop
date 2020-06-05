@@ -1,0 +1,4 @@
+"D:\Program Files\JetBrains\Toolbox\apps\CLion\ch-0\201.7846.88\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" C:\Users\Cirno\Documents\CLionProjects\SimplePhotoshop
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/cmake-build-debug

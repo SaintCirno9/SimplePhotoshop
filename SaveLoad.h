@@ -51,7 +51,19 @@ struct Palette //调色板
 
 class BmpImage {
 public:
-    BmpImage() = default;
+    BmpImage() {
+        BmpImage("");
+    }
+
+    explicit BmpImage(string path) {
+        if (!LoadImage(path)) {
+            exit(1);
+        }
+    }
+
+    int getChannels() const {
+        return channels;
+    }
 
     int getHeight() const {
         return height;
@@ -61,23 +73,33 @@ public:
         return width;
     }
 
-    int getChannels() const {
-        return channels;
+    void setWidth(int width) {
+        BmpImage::width = width;
     }
 
-    const vector<vector<uchar>> &getData() {
+    void setHeight(int height) {
+        BmpImage::height = height;
+    }
+
+    const vector<vector<uchar>> &getData() const {
         return data;
     }
 
-    void setData(const vector<vector<uchar>> &data) {
-        this->data = data;
+    void setData(const vector<vector<uchar>> &newData) {
+        this->data = newData;
     }
 
-    bool is_loaded() const {
+    const BmpFileHeader &getBmpFileHeader() const {
+        return bmpFileHeader;
+    }
+
+    void setBmpFileHeader(const BmpFileHeader &bmpFileHeader) {
+        BmpImage::bmpFileHeader = bmpFileHeader;
+    }
+
+    bool isLoaded() const {
         return loaded;
     }
-
-    bool LoadImage(const string &path);
 
     bool SaveImage(const string &path);
 
@@ -87,18 +109,20 @@ public:
         return SaveImage(path);
     }
 
-    void ShowBMPInfo();
+    void ShowBMPInfo() const;
 
 private:
     string basePath;
     bool loaded = false;
     BmpFileHeader bmpFileHeader{};
     BmpInfoHeader bmpInfoHeader{};
-    int width; //长度
-    int height; //宽度
-    int channels; //通道数
+    int width{}; //长度
+    int height{}; //宽度
+    int channels{}; //通道数
     vector<vector<uchar>> data; //图片数据
     vector<Palette> palette; //调色板数据
+
+    bool LoadImage(const string &path);
 };
 
 bool BmpImage::LoadImage(const string &path) {
@@ -157,7 +181,7 @@ bool BmpImage::LoadImage(const string &path) {
 }
 
 bool BmpImage::SaveImage(const string &path) {
-    if (!is_loaded()) {
+    if (!isLoaded()) {
         cerr << "Bmp File Not Loaded, Cannot Save!" << endl;
         return false;
     }
@@ -184,8 +208,8 @@ bool BmpImage::SaveImage(const string &path) {
     return true;
 }
 
-void BmpImage::ShowBMPInfo() {
-    if (!is_loaded()) {
+void BmpImage::ShowBMPInfo() const {
+    if (!isLoaded()) {
         cerr << "Bmp File Not Loaded, Cannot Tell The Information!" << endl;
         return;
     }
