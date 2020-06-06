@@ -3,4 +3,4 @@ project(SimplePhotoshop)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SimplePhotoshop main.cpp SaveLoad.h ModelTrans.h)
+add_executable(SimplePhotoshop main.cpp SaveLoad.h ModelTrans.h ImageCompress.h Bitmap.h huffman.h)

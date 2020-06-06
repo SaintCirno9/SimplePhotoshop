@@ -80,10 +80,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/Bitmap.h">
+			<Option target="SimplePhotoshop"/>
+		</Unit>
+		<Unit filename="C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/ImageCompress.h">
+			<Option target="SimplePhotoshop"/>
+		</Unit>
 		<Unit filename="C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/ModelTrans.h">
 			<Option target="SimplePhotoshop"/>
 		</Unit>
 		<Unit filename="C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h">
+			<Option target="SimplePhotoshop"/>
+		</Unit>
+		<Unit filename="C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/huffman.h">
 			<Option target="SimplePhotoshop"/>
 		</Unit>
 		<Unit filename="C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/main.cpp">

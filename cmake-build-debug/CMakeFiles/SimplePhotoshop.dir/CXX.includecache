@@ -6,6 +6,22 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/Bitmap.h
+SaveLoad.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/ImageCompress.h
+SaveLoad.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+Bitmap.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/Bitmap.h
+huffman.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/huffman.h
+
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/ModelTrans.h
+SaveLoad.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+
 C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
 string
 -
@@ -15,8 +31,24 @@ iostream
 -
 vector
 -
+algorithm
+-
+cmath
+-
+
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/huffman.h
+SaveLoad.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+cstring
+-
+sstream
+-
 
 C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/main.cpp
 SaveLoad.h
 C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/SaveLoad.h
+ModelTrans.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/ModelTrans.h
+ImageCompress.h
+C:/Users/Cirno/Documents/CLionProjects/SimplePhotoshop/ImageCompress.h
 

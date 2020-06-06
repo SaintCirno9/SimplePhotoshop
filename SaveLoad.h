@@ -9,6 +9,8 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -51,9 +53,7 @@ struct Palette //µ÷É«°å
 
 class BmpImage {
 public:
-    BmpImage() {
-        BmpImage("");
-    }
+    BmpImage() = default;
 
     explicit BmpImage(string path) {
         if (!LoadImage(path)) {
@@ -75,10 +75,12 @@ public:
 
     void setWidth(int width) {
         BmpImage::width = width;
+        bmpInfoHeader.biWidth = width;
     }
 
     void setHeight(int height) {
         BmpImage::height = height;
+        bmpInfoHeader.biHeight = height;
     }
 
     const vector<vector<uchar>> &getData() const {
@@ -101,12 +103,11 @@ public:
         return loaded;
     }
 
-    bool SaveImage(const string &path);
+    bool SaveImage(const string &postFix);
 
     bool SaveImage() {
-        string path = basePath.substr(0, basePath.find(".bmp"));
-        path += "_save.bmp";
-        return SaveImage(path);
+        string postFix = "_save.bmp";
+        return SaveImage(postFix);
     }
 
     void ShowBMPInfo() const;
@@ -126,7 +127,7 @@ private:
 };
 
 bool BmpImage::LoadImage(const string &path) {
-    basePath = path;
+    basePath = path.substr(0, path.find(".bmp"));
     ifstream fileReader(path, ios::binary);
     if (!fileReader.is_open()) {
         cerr << "Reader: Failed to open the file" << endl;
@@ -180,16 +181,44 @@ bool BmpImage::LoadImage(const string &path) {
     return true;
 }
 
-bool BmpImage::SaveImage(const string &path) {
+bool BmpImage::SaveImage(const string &postFix) {
     if (!isLoaded()) {
         cerr << "Bmp File Not Loaded, Cannot Save!" << endl;
         return false;
     }
-    //bmpInfoHeader.biHeight = -bmpInfoHeader.biHeight;
+    string defaultPath = basePath + postFix;
+    int choice = 0;
+    cout << "Save the result? (1)Yes (2)No " << endl;
+    cin >> choice;
+    while (choice < 1 || choice > 2) {
+        cout << "Wrong input! Please type a num between 1-2. " << endl;
+        cin >> choice;
+    }
+    if (choice == 2) {
+        cout << "Image Not Saved.";
+        return false;
+    }
+    choice = 0;
+    cout << "Do you want to save in a new path (1)Yes (2)No, just save in the default path " + defaultPath << endl;
+    cin >> choice;
+
+    while (choice < 1 || choice > 2) {
+        cout << "Wrong input! Please type a num between 1-2. " << endl;
+        cin >> choice;
+    }
+    string path;
+
+    if (choice == 1) {
+        cout << "Please input the path where you want to save the Image " << endl;
+        getline(cin, path);
+    } else {
+        path = defaultPath;
+    }
+
     ofstream fileWriter;
-    fileWriter.open(path, ios::out | ios::binary | ios::trunc);
+    fileWriter.open(defaultPath, ios::out | ios::binary | ios::trunc);
     if (!fileWriter.is_open()) {
-        cerr << "Writer: Failed to open the file" << endl;
+        cerr << "Writer: Failed to write the file" << endl;
         return false;
     }
     fileWriter.write(reinterpret_cast<char *>(&bmpFileHeader), sizeof(bmpFileHeader));

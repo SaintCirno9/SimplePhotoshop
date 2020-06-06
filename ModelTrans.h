@@ -1,96 +1,91 @@
 #pragma once
 
 #include "SaveLoad.h"
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <math.h>
+
 
 using namespace std;
 
-typedef unsigned short ushort;
-typedef unsigned long ulong;
-typedef unsigned char uchar;
-
 class ModelTrans {
-private:
-    BmpImage bmpImage;
-    vector<vector<uchar>> bmpData;
-    int channels;
 public:
-    bool singleThreshold();
+    ModelTrans() = default;
 
-    bool dithering();
-
-    void getDitheringMatrix(int n, vector<vector<uchar>> &D);
-
-    bool orderedDithering();
-
-    void RGBtoHSI();
-
-    void pixelRGBtoHSI(uchar R, uchar G, uchar B, uchar &H, uchar &S, uchar &I);
-
-    void RGBtoYCbCr();
-
-    void pixelRGBtoYCbCr(uchar R, uchar G, uchar B, uchar &Y, uchar &Cb, uchar &Cr);
-
-//	vector<vector<int>>* getDitheringMatrix(vector<vector<int>>* matrix, int n);
-    explicit ModelTrans(BmpImage *bmpImage, int channels) {
-        if (!bmpImage->getData().empty() && (channels == 0 || channels == 3)) {
-            this->bmpImage = *bmpImage;
+    explicit ModelTrans(BmpImage &bmpImage, int channels) {
+        if (!bmpImage.getData().empty() && (channels == 1 || channels == 3)) {
+            this->bmpImage = bmpImage;
             this->channels = channels;
-            this->bmpData = bmpImage->getData();
-            cout << channels << endl;
+            this->bmpData = bmpImage.getData();
         } else {
             exit(1);
         }
     }
 
-    bool doOperation() {
-        if (channels == 1) {
-            int choose = 0;
-            cout << "Please choose an operation:\n1.single threshold\n2.dithering\n3.ordered dithering\n4.exit\n";
-            cin >> choose;
-            switch (choose) {
-                case 1:
-                    singleThreshold();
-                    break;
-                case 2:
-                    dithering();
-                    break;
-                case 3:
-                    orderedDithering();
-                    break;
-                case 4:
-                    exit(1);
-                default:
-                    cout << "wrong input\n";
-            }
-        } else if (channels == 3) {
-            int choose = 0;
-            cout << "Please choose the model you want to transfer:\n1.RGB-->HSI\n2.RGB-->YCbCr\n";
-            cin >> choose;
-            switch (choose) {
-                case 1:
-                    RGBtoHSI();
-                    break;
-                case 2:
-                    RGBtoYCbCr();
-                    break;
-                default:
-                    cout << "wrong input!\n";
-            }
+    void doOperation();
 
-        } else {
-            cout << "1st Image Error!";
-        }
+private:
+    BmpImage bmpImage;
+    vector<vector<uchar>> bmpData;
+    int channels;
 
-    }
+    bool singleThreshold(string postFix);
+
+    bool dithering(string postFix);
+
+    bool orderedDithering(string postFix);
+
+    void getDitheringMatrix(int n, vector<vector<uchar>> &D);
+
+
+    void RGBtoHSI(string postFix);
+
+    void pixelRGBtoHSI(uchar R, uchar G, uchar B, uchar &H, uchar &S, uchar &I);
+
+    void RGBtoYCbCr(string postFix);
+
+    static void pixelRGBtoYCbCr(uchar R, uchar G, uchar B, uchar &Y, uchar &Cb, uchar &Cr);
+
 };
 
-bool ModelTrans::singleThreshold() {
+void ModelTrans::doOperation() {
+    if (channels == 1) {
+        int choose = 0;
+        cout << "Please choose an operation:\n1.single threshold\n2.dithering\n3.ordered dithering\n4.exit\n";
+        cin >> choose;
+        switch (choose) {
+            case 1:
+                singleThreshold("_SingleThreshold.bmp");
+                break;
+            case 2:
+                dithering("_Dithering.bmp");
+                break;
+            case 3:
+                orderedDithering("_OrderedDithering.bmp");
+                break;
+            case 4:
+                exit(1);
+            default:
+                cout << "wrong input\n";
+        }
+    } else if (channels == 3) {
+        int choose = 0;
+        cout << "Please choose the model you want to transfer:\n1.RGB-->HSI\n2.RGB-->YCbCr\n";
+        cin >> choose;
+        switch (choose) {
+            case 1:
+                RGBtoHSI("_RGBtoHSI.bmp");
+                break;
+            case 2:
+                RGBtoYCbCr("_RGBtoYCbCr.bmp");
+                break;
+            default:
+                cout << "wrong input!" << endl;
+        }
+
+    } else {
+        cout << "1st Image Error!" << endl;
+    }
+}
+
+bool ModelTrans::singleThreshold(string postFix) {
     bool TransDone = false;
     int thresholdInt = 0;
     uchar threshold;
@@ -99,9 +94,9 @@ bool ModelTrans::singleThreshold() {
     while (true) {
         cin >> thresholdInt;
         if (thresholdInt < 1 || thresholdInt > 255) {
-            cout << "Please input the right threshold!\nInput again:\n";
+            cout << "Please input the right threshold!" << endl;
         } else {
-            cout << "waiting...";
+            cout << "waiting..." << endl;
             threshold = static_cast<unsigned char>(thresholdInt);
             //vector<uchar> dataValues;
             for (size_t i = 0; i <= bmpData.size() - 1; i++) {
@@ -118,7 +113,8 @@ bool ModelTrans::singleThreshold() {
             //cout << "something wrong?";
             //system("PAUSE");
             bmpImage.setData(bmpData);
-            bmpImage.SaveImage();
+            cout << "operation success!" << endl;
+            bmpImage.SaveImage(postFix);
             TransDone = true;
             break;
         }
@@ -126,7 +122,7 @@ bool ModelTrans::singleThreshold() {
     return TransDone;
 }
 
-bool ModelTrans::dithering() {
+bool ModelTrans::dithering(string postFix) {
     bool transDone = false;
     vector<vector<uchar>> D;//dither matrix
     vector<vector<uchar>> I;//matrix after divided.
@@ -142,7 +138,7 @@ bool ModelTrans::dithering() {
         if (n & (n - 1) || check != 0) {//if n is not the index times of 2 or not a integer
             cout << "please input the index times of 2!(for example:4)" << endl;
         } else {
-            cout << "waiting...";
+            cout << "waiting..." << endl;
             break;
         }
     }
@@ -187,19 +183,18 @@ bool ModelTrans::dithering() {
     }
     bmpImage.setHeight(bmpImage.getHeight() * n);
     bmpImage.setWidth(bmpImage.getWidth() * n);
-    //bmpImage.bmpInfoHeader.biXPelsPerMeter = bmpImage.bmpInfoHeader.biXPelsPerMeter / n;
-    //bmpImage.bmpInfoHeader.biYPelsPerMeter = bmpImage.bmpInfoHeader.biYPelsPerMeter / n;
     BmpFileHeader bmpFileHeader = bmpImage.getBmpFileHeader();
     bmpFileHeader.bfSize = bmpFileHeader.bfOffBits + bmpImage.getWidth() * bmpImage.getHeight();
     bmpImage.setBmpFileHeader(bmpFileHeader);
 
     bmpImage.setData(bmpData);
-    bmpImage.SaveImage();
+    cout << "operation success!" << endl;
+    bmpImage.SaveImage(postFix);
     transDone = true;
     return transDone;
 }
 
-bool ModelTrans::orderedDithering() {
+bool ModelTrans::orderedDithering(string postFix) {
     bool transDone = false;
     vector<vector<uchar>> D;//dither matrix
     vector<vector<uchar>> I;//matrix after divided.
@@ -215,7 +210,7 @@ bool ModelTrans::orderedDithering() {
         if (n & (n - 1) || check != 0) {//if n is not the index times of 2
             cout << "please input the index times of 2!(for example:4)" << endl;
         } else {
-            cout << "waiting...";
+            cout << "waiting..." << endl;
             break;
         }
     }
@@ -244,7 +239,8 @@ bool ModelTrans::orderedDithering() {
         }
     }
     bmpImage.setData(bmpData);
-    bmpImage.SaveImage();
+    cout << "operation success!" << endl;
+    bmpImage.SaveImage(postFix);
     transDone = true;
     return transDone;
 }
@@ -293,7 +289,7 @@ void ModelTrans::getDitheringMatrix(int n, vector<vector<uchar>> &D) {
     }
 }
 
-void ModelTrans::RGBtoHSI() {
+void ModelTrans::RGBtoHSI(string postFix) {
     size_t step = 3;
     for (size_t i = 0; i <= bmpData.size() - 1; i++) {
         //cout << i << endl;
@@ -338,7 +334,7 @@ void ModelTrans::pixelRGBtoHSI(uchar R, uchar G, uchar B, uchar &H, uchar &S, uc
 
 }
 
-void ModelTrans::RGBtoYCbCr() {
+void ModelTrans::RGBtoYCbCr(string postFix) {
     size_t step = 3;
     for (size_t i = 0; i <= bmpData.size() - 1; i++) {
         //cout << i << endl;
@@ -349,15 +345,16 @@ void ModelTrans::RGBtoYCbCr() {
         }
     }
     bmpImage.setData(bmpData);
-    bmpImage.SaveImage();
+    bmpImage.SaveImage(postFix);
 }
 
 void ModelTrans::pixelRGBtoYCbCr(uchar R, uchar G, uchar B, uchar &Y, uchar &Cb, uchar &Cr) {
-    float r = float(R);
-    float g = float(G);
-    float b = float(B);
+    auto r = float(R);
+    auto g = float(G);
+    auto b = float(B);
     Y = (uchar) round(0.299 * r + 0.587 * g + 0.114 * b);
     Cb = (uchar) round(-0.1687 * r - 0.3313 * g + 0.5 * b + 128);
     Cr = (uchar) round(0.5 * r - 0.4187 * g - 0.0813 * b + 128);
 
 }
+
